@@ -32,6 +32,7 @@ func _physics_process(_delta):
 	
 	if is_on_floor():
 		double_jumped = false
+		set_wall_raycasts(true)
 
 func is_moving():
 	if Input.is_action_pressed("left") or Input.is_action_pressed("right"):
@@ -42,11 +43,10 @@ func move_vector():
 	return Vector2(Input.get_action_strength("right") - Input.get_action_strength("left"),1.0)
 
 func _unhandled_input(event):
-	if should_direction_flip:
-		if event.is_action_pressed("left"):
-			direction = -1
-		if event.is_action_pressed("right"):
-			direction = 1
+	if event.is_action_pressed("left"):
+		direction = -1
+	if event.is_action_pressed("right"):
+		direction = 1
 
 func set_animation(anim):
 	if $AnimatedSprite.animation == anim: return
@@ -75,6 +75,10 @@ func get_right_collider():
 
 func get_left_collider():
 	return $Wall/Left.get_collider()
+	
+func set_wall_raycasts(is_enabled):
+	$Wall/Left.enabled = is_enabled
+	$Wall/Right.enabled = is_enabled
 
 func die():
 	queue_free()
